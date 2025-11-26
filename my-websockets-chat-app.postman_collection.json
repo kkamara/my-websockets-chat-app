@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "793bdd6d-cb3c-4100-bbe7-265c26fa0964",
-		"name": "nodejs-reactjs-boilerplate",
+		"_postman_id": "228669be-b61d-4eca-9722-62d271c3a528",
+		"name": "my-websockets-chat-app",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "17125932"
 	},

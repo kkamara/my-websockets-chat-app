@@ -31,9 +31,9 @@
 
 [Get Postman HTTP client](https://www.postman.com).
 
-[Postman API Collection for NodeJS ReactJS Boilerplate](https://github.com/kkamara/nodejs-reactjs-boilerplate/blob/main/nodejs-reactjs-boilerplate.postman_collection.json).
+[Postman API Collection for My WebSockets Chat App](https://github.com/kkamara/my-websockets-chat-app/blob/main/my-websockets-chat-app.postman_collection.json).
 
-[Postman API Environment for NodeJS ReactJS Boilerplate](https://github.com/kkamara/nodejs-reactjs-boilerplate/blob/main/nodejs-reactjs-boilerplate.postman_environment.json).
+[Postman API Environment for My WebSockets Chat App](https://github.com/kkamara/my-websockets-chat-app/blob/main/my-websockets-chat-app.postman_environment.json).
 
 ## Important Note
 

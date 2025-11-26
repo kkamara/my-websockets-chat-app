@@ -72,6 +72,9 @@ export default function Header(props) {
           <li className="nav-item">
             <Link className="nav-link active" aria-current="page" to="/">Home</Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link active" aria-current="page" to="/chat">Chat</Link>
+          </li>
         </ul>
         <ul className="navbar-nav">
           {renderNavLinks()}

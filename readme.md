@@ -72,7 +72,7 @@ yarn build
 
 #### Sequelize tutorial
 
-See [package.json](https://github.com/kkamara/nodejs-reactjs-boilerplate/blob/main/package.json) for helpful commands related to using the database.
+See [package.json](https://github.com/kkamara/my-websockets-chat-app/blob/main/package.json) for helpful commands related to using the database.
 
 ```bash
 # Docs:
@@ -135,7 +135,7 @@ docker-compose up --build -d
 
 ![docker-mailhog.png](https://raw.githubusercontent.com/kkamara/useful/main/docker-mailhog.png)
 
-Mail environment credentials are at [.env.docker](https://raw.githubusercontent.com/kkamara/nodejs-reactjs-boilerplate/main/.env.docker).
+Mail environment credentials are at [.env.docker](https://raw.githubusercontent.com/kkamara/my-websockets-chat-app/main/.env.docker).
 
 The [Mailhog](https://github.com/mailhog/MailHog) Docker image runs at `http://localhost:8025`in this app.
 

@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-reactjs-boilerplate",
+  "name": "my-websockets-chat-app",
   "version": "0.1.0",
-  "description": "(22-Jun-2021) An MVC NodeJS boilerplate with ReactJS 19 Redux SPA.",
+  "description": "(26-Nov-2025) A live chat app utilising WebSockets.",
   "main": "src/app.js",
   "scripts": {
     "test": "mocha tests/**/{,**/}*.js",

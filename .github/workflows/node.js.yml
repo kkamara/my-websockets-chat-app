@@ -1,0 +1,50 @@
+name: Tests Pipeline
+
+on: [push, pull_request]
+
+env:
+  NODE_ARGS: "NODE_ENV='test'"
+
+jobs:
+  nodejs-reactjs-boilerplate:
+    name: Tests Pipeline (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 'secret'
+          MYSQL_DATABASE: 'boilerplate'
+          MYSQL_USER: 'user'
+          MYSQL_PASSWORD: 'secret'
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      matrix:
+        node-version: ['23.x']
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: mskelton/setup-yarn@v3
+      with:
+        flags: --immutable-cache
+    - name: Setup Env Variables
+      run: |
+          cp .env.example .env
+          sed -i "s/development/test/g" .env
+          sed -i "s/3306/${{ job.services.mysql.ports['3306'] }}/g" testing_config.json
+          sed -i "s/\"root\"/\"user\"/g" testing_config.json
+    - name: Install dependencies
+      run: yarn install --silent
+    - name: Run database migrations
+      run: ${{ env.NODE_ARGS }} yarn migrate:test
+    - name: Run database seeders
+      run: ${{ env.NODE_ARGS }} yarn seed:all:test
+    - name: Run server in background
+      run: yarn start &
+    - name: Run tests
+      run: yarn run test

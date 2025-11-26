@@ -1,0 +1,21 @@
+nav.navbar.navbar-expand-lg.mb-4.bg-primary.header-container(data-bs-theme="dark")
+  div.container
+    a.navbar-brand(href="#")= config.appName
+    button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+      span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.me-auto.mb-2.mb-lg-0
+        li.nav-item
+          a.nav-link.active(href="#") 
+            | Home
+      ul.navbar-nav
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle.active(href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false")
+            | User
+          ul.dropdown-menu
+            li
+              a.dropdown-item(href="#")
+                | Settings
+            li
+              a.dropdown-item(href="#")
+                |  Sign Out

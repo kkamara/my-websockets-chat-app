@@ -4,7 +4,7 @@
 
 # my-websockets-chat-app
 
-(26-Nov-2025) A live chat app utilising WebSockets.
+(26-Nov-2025) A live chat app utilising WebSockets. With real-time notifications. Using package, socket.io.
 
 * [Using Postman?](#postman)
 

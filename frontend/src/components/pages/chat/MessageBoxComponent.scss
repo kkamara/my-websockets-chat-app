@@ -1,0 +1,26 @@
+.message-box-container {
+  background-color: lightgray;
+  width: 100%;
+  max-height: 590px;
+}
+
+.close-message-box-btn {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.message-box-input {
+  margin-top: 0%;
+  height: 100px;
+  width: 90% !important;
+  display: inline-block !important;
+}
+
+.send-message-btn {
+  width: 10%;
+  height: 100px;
+}
+
+.messages {
+  max-height: 420px;
+}

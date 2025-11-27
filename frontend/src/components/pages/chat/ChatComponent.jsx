@@ -1,5 +1,6 @@
 import React from 'react'
 import ChatSidebar from './ChatSidebar';
+import MessageBoxComponent from './MessageBoxComponent';
 
 const ChatComponent = () => {
   return (
@@ -9,7 +10,7 @@ const ChatComponent = () => {
           <ChatSidebar/>
         </div>
         <div className="col-md-10">
-          <div>ChatComponent</div>
+          <MessageBoxComponent/>
         </div>
       </div>
     </div>

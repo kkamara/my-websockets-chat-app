@@ -46,7 +46,7 @@ const data = [
     userId: 1,
   },
   {
-    message: "Commodo consequat pariatur amet proident sit ullamco aute esse laborum minim eu do.",
+    message: "Commodo consequat pariatur amet proident sit ullamco aute esse laborum minim eu do 😂😂😂",
     profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
     userId: 2,
   },
@@ -71,7 +71,7 @@ const data = [
     userId: 1,
   },
   {
-    message: "Voluptate dolor ea sint mollit velit nostrud mollit ad ipsum occaecat sint dolor officia occaecat.",
+    message: "Voluptate dolor ea sint mollit velit nostrud mollit ad ipsum occaecat sint dolor officia occaecat 😂",
     profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
     userId: 1,
   },

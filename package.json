@@ -1,7 +1,7 @@
 {
   "name": "my-websockets-chat-app",
   "version": "0.1.0",
-  "description": "(26-Nov-2025) A live chat app utilising WebSockets. With real-time notifications. Using package, socket.io.",
+  "description": "(26-Nov-2025) A live chat app utilising WebSockets. With real-time notifications. This project uses the Socket.io package.",
   "main": "src/app.js",
   "scripts": {
     "test": "mocha tests/**/{,**/}*.js",

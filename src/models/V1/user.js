@@ -884,6 +884,33 @@ module.exports = (sequelize, DataTypes) => {
         return false;
       }
     }
+
+    /**
+     * @return {object|false}
+     */
+    static async getUsers() {
+      let res = false;
+      try {
+        const results = await sequelize.query(
+          `SELECT id, firstName, lastName, email,
+              password, passwordSalt, avatarName, updatedAt
+            FROM ${this.getTableName()}
+            WHERE ${this.getTableName()}.deletedAt IS NULL
+            ORDER BY id DESC`, 
+          {
+              type: QueryTypes.SELECT,
+          },
+        );
+
+        res = this.getFormattedUsersData(results);
+        return res;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return res;
+      }
+    }
   }
   
   User.init({

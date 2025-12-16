@@ -32,7 +32,7 @@ const getUnpaginatedUsers = asyncHandler(async (req, res) => {
     throw new Error(message500);
   }
 
-  return res.json(users);
+  return res.json({ data: users });
 });
 
 module.exports = { getUsers, getUnpaginatedUsers, };

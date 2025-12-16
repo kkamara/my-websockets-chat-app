@@ -12,26 +12,69 @@ module.exports = {
       const fakeUsers = [];
       let pwd;
 
-      for(let i=0; i < 30; i++) {
-        pwd = encrypt("secret");
-        fakeUsers.push({
-          email: faker.internet.email(),
-          firstName: faker.person.firstName(),
-          lastName: faker.person.lastName(),
-          password: pwd.hash,
-          passwordSalt: pwd.salt,
-          createdAt: moment()
-            .utc()
-            .format(mysqlTimeFormat),
-          updatedAt: moment()
-            .utc()
-            .format(mysqlTimeFormat),
-        })
-      }
+      pwd = encrypt("secret");
+      fakeUsers.push({
+        email: "john@example.com",
+        firstName: "John",
+        lastName: "Doe",
+        password: pwd.hash,
+        passwordSalt: pwd.salt,
+        createdAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+        updatedAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+      })
+
+      pwd = encrypt("secret");
+      fakeUsers.push({
+        email: "james@example.com",
+        firstName: "James",
+        lastName: "Doe",
+        password: pwd.hash,
+        passwordSalt: pwd.salt,
+        createdAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+        updatedAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+      })
+
+      pwd = encrypt("secret");
+      fakeUsers.push({
+        email: "joanna@example.com",
+        firstName: "Joanna",
+        lastName: "Doe",
+        password: pwd.hash,
+        passwordSalt: pwd.salt,
+        createdAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+        updatedAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+      })
+
+      pwd = encrypt("secret");
+      fakeUsers.push({
+        email: "juliet@example.com",
+        firstName: "Juliet",
+        lastName: "Doe",
+        password: pwd.hash,
+        passwordSalt: pwd.salt,
+        createdAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+        updatedAt: moment()
+          .utc()
+          .format(mysqlTimeFormat),
+      })
       
       pwd = encrypt("secret");
       fakeUsers.push({
-        email: "jane@doe.com",
+        email: "jane@example.com",
         firstName: "Jane",
         lastName: "Doe",
         password: pwd.hash,

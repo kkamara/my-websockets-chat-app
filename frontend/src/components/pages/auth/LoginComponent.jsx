@@ -3,6 +3,7 @@ import { useDispatch, useSelector, } from "react-redux"
 import { Helmet, } from "react-helmet"
 import { login, authorise, } from "../../../redux/actions/authActions"
 import Error from "../../layouts/Error"
+import axios from "axios"
 
 import "./LoginComponent.scss"
 
@@ -12,6 +13,8 @@ const defaultPasswordState = "secret"
 export default function LoginComponent() {
   const [email, setEmail] = useState(defaultEmailState)
   const [password, setPassword] = useState(defaultPasswordState)
+  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const dispatch = useDispatch()
   const state = useSelector(state => ({
@@ -19,7 +22,9 @@ export default function LoginComponent() {
   }))
 
   useEffect(() => {
+    setLoading(true)
     dispatch(authorise())
+    loadData()
   }, [])
 
   useEffect(() => {
@@ -27,6 +32,19 @@ export default function LoginComponent() {
       window.location.href = "/"
     }
   }, [state.auth])
+
+  const loadData = async () => {
+    try {
+      const res = await axios.get(
+        process.env.REACT_APP_API_ROOT+"/api/v1/web/users/all",
+      )
+      setUsers(res.data.data)
+      setLoading(false)
+    } catch (err) {
+      console.error("Error loading all users:", err)
+      setLoading(false)
+    }
+  }
 
   const onFormSubmit = (e) => {
     e.preventDefault()
@@ -45,7 +63,7 @@ export default function LoginComponent() {
     setPassword(e.target.value)
   }
 
-  if (state.auth.loading) {
+  if (state.auth.loading || loading) {
     return <div className="container login-container text-center">
       <Helmet>
         <title>Sign In - {process.env.REACT_APP_NAME}</title>
@@ -64,12 +82,16 @@ export default function LoginComponent() {
         <Error error={state.auth.error} />
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input 
+          <select 
             name="email" 
             className="form-control"
             value={email}
             onChange={onEmailChange}
-          />
+          >
+            {users.map(user => (
+              <option key={user.id} value={user.email}>{user.email}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="password">Password:</label>

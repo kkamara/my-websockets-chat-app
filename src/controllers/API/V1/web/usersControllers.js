@@ -25,4 +25,14 @@ const getUsers = asyncHandler(async (req, res) => {
   return res.json(users);
 });
 
-module.exports = { getUsers, };
+const getUnpaginatedUsers = asyncHandler(async (req, res) => {
+  const users = await db.sequelize.models.user.getUsers();
+  if (false === users) {
+    res.status(status.INTERNAL_SERVER_ERROR)
+    throw new Error(message500);
+  }
+
+  return res.json({ data: users });
+});
+
+module.exports = { getUsers, getUnpaginatedUsers, };

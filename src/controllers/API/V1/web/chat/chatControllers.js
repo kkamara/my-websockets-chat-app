@@ -2,11 +2,11 @@
 const asyncHandler = require("express-async-handler");
 const db = require("../../../../../models/V1");
 const { default: status } = require("http-status");
-const { message400, message200 } = require("../../../../../utils/httpResponses");
+const { message400, } = require("../../../../../utils/httpResponses");
 
 const createChat = asyncHandler(async (req, res) => {
   const inputError = await db.sequelize.models.chat
-    .getCreateChatError(req.body);
+    .getCreateChatError(req.body, req.session.userID);
   if (false !== inputError) {
     res.status(status.BAD_REQUEST);
     throw new Error(inputError);

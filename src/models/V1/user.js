@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {string} id
-     * @return {object|false}
+     * @return {Object|false}
      */
     static async getUserById(id) {
       let res = false;
@@ -91,7 +91,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {string} id
-     * @return {object|false}
+     * @return {Object|false}
      */
     static async getRawUserById(id) {
       let res = false;
@@ -121,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {string} token
-     * @return {object|false}
+     * @return {Object|false}
      */
     static async getUserByToken(token) {
       let res = false;
@@ -158,7 +158,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {number} id
-     * @return {object|false}
+     * @return {Object|false}
      */
     static async getUser(id) {
       let res = false;
@@ -228,7 +228,7 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * @param {number} page
      * @param {number} perPage
-     * @returns {object|false}
+     * @returns {Object|false}
      */
     static async getUsersPaginated(
       page = 1,
@@ -291,7 +291,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * @param {false|object} bodyInput 
+     * @param {false|Object} bodyInput 
      */
     static getRegisterError(bodyInput) {
       if (undefined === bodyInput.firstName) {
@@ -355,7 +355,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {Object} bodyInput
-     * @returns {object|false}
+     * @returns {Object|false}
      */
     static getCreateUserData(bodyInput) {
       if (undefined === bodyInput.firstName) {
@@ -500,7 +500,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {Object} data
-     * @returns {object}
+     * @returns {Object}
      */
     static getFormattedUserData(data) {
       return {
@@ -522,7 +522,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {number} email
-     * @returns {object|false}
+     * @returns {Object|false}
      */
     static async getUserByEmail(email) {
       try {
@@ -586,7 +586,7 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * @param {string} email
      * @param {string} password
-     * @returns {object|false}
+     * @returns {Object|false}
      */
     static getCleanLoginData(email, password) {
       if (undefined === email) {
@@ -612,7 +612,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {string} token
-     * @returns {object|false}
+     * @returns {Object|false}
      */
     static async getUserByAuthToken(token) {
       try {
@@ -886,7 +886,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * @return {object|false}
+     * @return {Object|false}
      */
     static async getUsers() {
       let res = false;

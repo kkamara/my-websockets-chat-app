@@ -27,8 +27,15 @@ const createChat = asyncHandler(async (req, res) => {
     res.status(status.INTERNAL_SERVER_ERROR);
     throw new Error("Failed to create chat.");
   }
+  
+  const chat = await db.sequelize.models.chat
+    .getChat(createChat.chatID);
+  if (false === chat) {
+    res.status(status.INTERNAL_SERVER_ERROR);
+    throw new Error("Failed to retrieve created chat.");
+  }
 
-  return res.json({ message: message200 });
+  return res.json({ data: chat });
 });
 
 const createGroupChat = asyncHandler(async (req, res) => {
@@ -59,7 +66,14 @@ const createGroupChat = asyncHandler(async (req, res) => {
     throw new Error("Failed to create group chat.");
   }
 
-  return res.json({ message: message200 });
+  const chat = await db.sequelize.models.chat
+    .getChat(createChat.chatID);
+  if (false === chat) {
+    res.status(status.INTERNAL_SERVER_ERROR);
+    throw new Error("Failed to retrieve created group chat.");
+  }
+
+  return res.json({ data: chat });
 });
 
 module.exports = { createChat, createGroupChat, };

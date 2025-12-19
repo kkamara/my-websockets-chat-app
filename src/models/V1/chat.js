@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const { nodeEnv, } = require('../../config');
+const { nodeEnv, appTimezone, } = require('../../config');
 const { integerNumberRegex, } = require("../../utils/regexes");
 const moment = require("moment-timezone");
 const { mysqlTimeFormat, } = require("../../utils/time");
@@ -191,6 +191,53 @@ module.exports = (sequelize, DataTypes) => {
         }
         return false;
       }
+    }
+
+    /**
+     * @param {number} id
+     * @return {Object|false}
+     */
+    static async getChat(id) {
+      let res = false;
+      try {
+        const result = await sequelize.query(
+          `SELECT *
+            FROM ${this.getTableName()}
+            WHERE ${this.getTableName()}.id=? AND ${this.getTableName()}.deletedAt IS NULL
+            LIMIT 1`,
+          {
+            replacements: [ id, ],
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        if (0 === result.length) {
+          res = false;
+          return res;
+        }
+
+        res = this.getFormattedChatData(result[0]);
+        return res;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return res;
+      }
+    }
+
+    static getFormattedChatData(chatData) {
+      return {
+        id: chatData.id,
+        chatName: chatData.chatName,
+        isGroupChat: Boolean(chatData.isGroupChat),
+        createdAt: moment(chatData.createdAt)
+          .tz(appTimezone)
+          .format(mysqlTimeFormat),
+        updatedAt: moment(chatData.updatedAt)
+          .tz(appTimezone)
+          .format(mysqlTimeFormat),
+      };
     }
   }
   chat.init({

@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   chatMessage.init({
-    senderId: {
+    senderID: {
       type: DataTypes.INTEGER
     },
     content: {
       type: DataTypes.TEXT
     },
-    chatId: {
+    chatID: {
       type: DataTypes.INTEGER
     },
     createdAt: {

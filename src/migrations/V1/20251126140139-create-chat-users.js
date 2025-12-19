@@ -11,10 +11,10 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER
         },
-        chatId: {
+        chatID: {
           type: Sequelize.INTEGER
         },
-        userId: {
+        userID: {
           type: Sequelize.INTEGER,
         },
         createdAt: {

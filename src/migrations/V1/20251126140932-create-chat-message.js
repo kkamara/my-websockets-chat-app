@@ -11,13 +11,13 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER
         },
-        senderId: {
+        senderID: {
           type: Sequelize.INTEGER
         },
         content: {
           type: Sequelize.TEXT
         },
-        chatId: {
+        chatID: {
           type: Sequelize.INTEGER
         },
         createdAt: {

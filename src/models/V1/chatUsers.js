@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+const { nodeEnv, } = require('../../config');
+const moment = require("moment-timezone");
+const { mysqlTimeFormat, } = require("../../utils/time");
 module.exports = (sequelize, DataTypes) => {
   class chatUsers extends Model {
     /**
@@ -12,12 +15,48 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
+    /**
+     * @param {number} chatID
+     * @param {Array} userIDs
+     * @return {boolean}
+     */
+    static async createChatUsers(chatID, userIDs) {
+      try {
+        for (const userID of userIDs) {
+          await sequelize.query(
+            `INSERT INTO ${this.getTableName()}(chatID, userID, createdAt, updatedAt)
+              VALUES (:chatID, :userID, :createdAt, :updatedAt);`, 
+            {
+              replacements: {
+                chatID,
+                userID,
+                createdAt: moment()
+                  .utc()
+                  .format(mysqlTimeFormat),
+                updatedAt: moment()
+                  .utc()
+                  .format(mysqlTimeFormat),
+              },
+              type: sequelize.QueryTypes.INSERT,
+            },
+          );
+        }
+
+        return true;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
   }
   chatUsers.init({
-    chatId: {
+    chatID: {
       type: DataTypes.INTEGER
     },
-    userId: {
+    userID: {
       type: DataTypes.INTEGER,
     },
     createdAt: {

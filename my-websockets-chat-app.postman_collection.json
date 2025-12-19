@@ -436,6 +436,19 @@
 					]
 				},
 				{
+					"name": "Chat",
+					"item": [
+						{
+							"name": "Create Chat",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get Users",
 					"request": {
 						"method": "GET",
@@ -447,6 +460,31 @@
 							],
 							"path": [
 								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unpaginated Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{web}}/users/all",
+							"host": [
+								"{{web}}"
+							],
+							"path": [
+								"users",
+								"all"
 							],
 							"query": [
 								{

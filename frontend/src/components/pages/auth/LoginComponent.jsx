@@ -7,7 +7,7 @@ import axios from "axios"
 
 import "./LoginComponent.scss"
 
-const defaultEmailState = "jane@doe.com"
+const defaultEmailState = ""
 const defaultPasswordState = "secret"
 
 export default function LoginComponent() {
@@ -40,6 +40,7 @@ export default function LoginComponent() {
       )
       setUsers(res.data.data)
       setLoading(false)
+      setEmail(res.data.data[0]?.email || "")
     } catch (err) {
       console.error("Error loading all users:", err)
       setLoading(false)

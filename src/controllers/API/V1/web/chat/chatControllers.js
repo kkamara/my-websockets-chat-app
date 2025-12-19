@@ -18,6 +18,16 @@ const createChat = asyncHandler(async (req, res) => {
     res.status(status.BAD_REQUEST);
     throw new Error(message400);
   }
+
+  const chatExists = await db.sequelize.models.chatUsers
+    .checkChatExists(
+      req.session.userID,
+      cleanData.userID,
+    );
+  if (true === chatExists) {
+    res.status(status.CONFLICT);
+    throw new Error("Chat between yourself and the given user already exists.");
+  }
   
   const createChat = await db.sequelize.models.chat
     .createChat(

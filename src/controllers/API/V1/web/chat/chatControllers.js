@@ -31,4 +31,35 @@ const createChat = asyncHandler(async (req, res) => {
   return res.json({ message: message200 });
 });
 
-module.exports = { createChat, };
+const createGroupChat = asyncHandler(async (req, res) => {
+  const inputError = await db.sequelize.models.chat
+    .getCreateGroupChatError(req.body);
+  if (false !== inputError) {
+    res.status(status.BAD_REQUEST);
+    throw new Error(inputError);
+  }
+  
+  const cleanData = db.sequelize.models.chat
+    .getCleanCreateGroupChatData(
+      req.body.chatName,
+      req.body.userIDs,
+    );
+  if (false === cleanData) {
+    res.status(status.BAD_REQUEST);
+    throw new Error(message400);
+  }
+  
+  const createChat = await db.sequelize.models.chat
+    .createGroupChat(
+      cleanData.chatName,
+      [req.session.userID, ...cleanData.userIDs]
+    );
+  if (false === createChat) {
+    res.status(status.INTERNAL_SERVER_ERROR);
+    throw new Error("Failed to create group chat.");
+  }
+
+  return res.json({ message: message200 });
+});
+
+module.exports = { createChat, createGroupChat, };

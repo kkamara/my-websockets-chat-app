@@ -441,8 +441,36 @@
 						{
 							"name": "Create Chat",
 							"request": {
-								"method": "GET",
-								"header": []
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userID\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{web}}/chat",
+									"host": [
+										"{{web}}"
+									],
+									"path": [
+										"chat"
+									]
+								}
 							},
 							"response": []
 						}

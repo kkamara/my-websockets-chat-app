@@ -61,10 +61,10 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * @param {Object} bodyInput
      * @param {number} bodyInput.userID
-     * @param {number} userID
+     * @param {number} authenticatedUserID
      * @return {false|string}
      */
-    static async getCreateChatError(bodyInput, userID) {
+    static async getCreateChatError(bodyInput, authenticatedUserID) {
       if (undefined === bodyInput.userID) {
         return "User ID is required.";
       } else if (
@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         null === `${bodyInput.userID}`.match(integerNumberRegex)
       ) {
         return "User ID must be a whole number.";
-      } else if (Number(bodyInput.userID) === Number(userID)) {
+      } else if (Number(bodyInput.userID) === Number(authenticatedUserID)) {
         return "You cannot create a chat with yourself.";
       } else {
         const user = await sequelize

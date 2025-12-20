@@ -229,8 +229,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
+    /**
+     * @param {Object} chatData 
+     * @returns {Object}
+     */
     static getFormattedChatData(chatData) {
-      return {
+      const res = {
         id: chatData.id,
         chatName: chatData.chatName,
         isGroupChat: Boolean(chatData.isGroupChat),
@@ -241,6 +245,83 @@ module.exports = (sequelize, DataTypes) => {
           .tz(appTimezone)
           .format(mysqlTimeFormat),
       };
+      if (chatData.to) {
+        if (Array.isArray(chatData.to)) {
+          res.to = sequelize.models.chatUsers
+            .getFormattedChatUsersData(chatData.to);
+        } else {
+          res.to = sequelize.models.chatUsers
+            .getFormattedChatUserData(chatData.to);
+        }
+      }
+      return res;
+    }
+
+    /**
+     * @param {number} userID
+     * @return {Object|false}
+     */
+    static async getChatList(userID) {
+      let res = false;
+      try {
+        const results = await sequelize.query(
+          `SELECT ${this.getTableName()}.id, ${this.getTableName()}.chatName,
+              ${this.getTableName()}.isGroupChat, ${this.getTableName()}.createdAt,
+              ${this.getTableName()}.updatedAt
+            FROM ${this.getTableName()}
+            LEFT JOIN ${sequelize.models.chatUsers.getTableName()}
+              ON ${sequelize.models.chatUsers.getTableName()}.chatID=${this.getTableName()}.id
+            WHERE ${sequelize.models.chatUsers.getTableName()}.userID=:userID
+              AND ${this.getTableName()}.deletedAt IS NULL
+              AND ${sequelize.models.chatUsers.getTableName()}.deletedAt IS NULL
+            ORDER BY ${this.getTableName()}.updatedAt DESC;`,
+          {
+            replacements: { userID, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        for (let i = 0; i < results.length; i++) {
+          const chatData = results[i];
+          if (true === Boolean(chatData.isGroupChat)) {
+            const chattingToChat = await sequelize.models
+              .chatUsers
+              .getChatUsersNotByUserID(chatData.id, userID);
+            if (false === chattingToChat) {
+              return res;
+            }
+            results[i].to = chattingToChat;
+          } else {
+            const chattingToChat = await sequelize.models
+              .chatUsers
+              .getChatUserNotByUserID(chatData.id, userID);
+            if (false === chattingToChat) {
+              return res;
+            }
+            results[i].to = chattingToChat;
+          }
+        }
+
+        res = this.getFormattedChatListData(results);
+        return res;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return res;
+      }
+    }
+
+    /**
+     * @param {Array} chatListData
+     * @return {Array}
+     */
+    static getFormattedChatListData(chatListData) {
+      const formattedChatList = [];
+      for (const chatData of chatListData) {
+        formattedChatList.push(this.getFormattedChatData(chatData));
+      }
+      return formattedChatList;
     }
   }
   chat.init({

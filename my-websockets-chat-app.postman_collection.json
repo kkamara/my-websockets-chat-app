@@ -524,9 +524,36 @@
 									"item": [
 										{
 											"name": "Get Chat List",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
 											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
 												"method": "GET",
-												"header": []
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"userID\": 2\r\n}"
+												},
+												"url": {
+													"raw": "{{web}}/chat/list",
+													"host": [
+														"{{web}}"
+													],
+													"path": [
+														"chat",
+														"list"
+													]
+												}
 											},
 											"response": []
 										}

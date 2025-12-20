@@ -2,9 +2,9 @@
 const {
   Model
 } = require('sequelize');
-const { nodeEnv, } = require('../../config');
 const moment = require("moment-timezone");
 const { mysqlTimeFormat, } = require("../../utils/time");
+const { nodeEnv, appTimezone, } = require('../../config');
 module.exports = (sequelize, DataTypes) => {
   class chatUsers extends Model {
     /**
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * @param {number} authenticatedUserID 
      * @param {number} queryUserID 
-     * @returns 
+     * @returns {boolean}
      */
     static async checkChatExists(authenticatedUserID, queryUserID) {
       let res = false;
@@ -99,6 +99,96 @@ module.exports = (sequelize, DataTypes) => {
           console.log(err);
         }
         return res;
+      }
+    }
+
+    /**
+     * @param {number} chatID
+     * @param {number} excludingUserID
+     * @returns {Object|false}
+     */
+    static async getChatUserNotByUserID(chatID, excludingUserID) {
+      try {
+        const result = await sequelize.query(
+          `SELECT ${this.getTableName()}.id AS chatUserID, ${this.getTableName()}.chatID,
+              ${this.getTableName()}.userID, ${this.getTableName()}.createdAt,
+              ${this.getTableName()}.updatedAt
+            FROM ${this.getTableName()}
+            WHERE ${this.getTableName()}.chatID=:chatID
+              AND ${this.getTableName()}.userID != :excludingUserID
+              AND ${this.getTableName()}.deletedAt IS NULL
+            LIMIT 1`,
+          {
+            replacements: { chatID, excludingUserID, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        return result[0];
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
+
+    /**
+     * @param {Object} payload 
+     * @returns {Object}
+     */
+    static getFormattedChatUserData(payload) {
+      return {
+        chatID: payload.chatID,
+        userID: payload.userID,
+        createdAt: moment(payload.createdAt)
+          .tz(appTimezone)
+          .format(mysqlTimeFormat),
+        updatedAt: moment(payload.updatedAt)
+          .tz(appTimezone)
+          .format(mysqlTimeFormat),
+      };
+    }
+
+    /**
+     * @param {Array} payload
+     * @return {Array}
+     */
+    static getFormattedChatUsersData(payload) {
+      const formattedChatList = [];
+      for (const chatUser of payload) {
+        formattedChatList.push(this.getFormattedChatUserData(chatUser));
+      }
+      return formattedChatList;
+    }
+
+    /**
+     * @param {number} chatID
+     * @param {number} excludingUserID
+     * @returns {Object|false}
+     */
+    static async getChatUsersNotByUserID(chatID, excludingUserID) {
+      try {
+        const results = await sequelize.query(
+          `SELECT ${this.getTableName()}.id AS chatUserID, ${this.getTableName()}.chatID,
+              ${this.getTableName()}.userID, ${this.getTableName()}.createdAt,
+              ${this.getTableName()}.updatedAt
+            FROM ${this.getTableName()}
+            WHERE ${this.getTableName()}.chatID=:chatID
+              AND ${this.getTableName()}.userID != :excludingUserID
+              AND ${this.getTableName()}.deletedAt IS NULL`,
+          {
+            replacements: { chatID, excludingUserID, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        return results;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
       }
     }
   }

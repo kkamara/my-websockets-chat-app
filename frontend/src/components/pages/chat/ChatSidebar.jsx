@@ -51,7 +51,7 @@ const data = [
 const ChatSidebar = () => {
   return <div className="chat-sidebar-container">
     <button className="btn btn-default btn-lg">
-      Add Chat <i class="fa-solid fa-plus"></i>
+      Add Chat <i className="fa-solid fa-plus"></i>
     </button>
     <br/>
     {data.map((d, index) => (

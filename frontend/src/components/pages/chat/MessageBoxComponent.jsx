@@ -101,7 +101,7 @@ const MessageBoxComponent = () => {
         className="btn btn-info btn-lg close-message-box-btn"
         onClick={handleCloseMessageBox}
       >
-        <i class="fa-solid fa-x"></i>
+        <i className="fa-solid fa-x"></i>
       </button>
     </div>
 

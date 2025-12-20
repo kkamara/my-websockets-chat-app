@@ -46,32 +46,12 @@ const data = [
     userId: 1,
   },
   {
-    message: "Commodo consequat pariatur amet proident sit ullamco aute esse laborum minim eu do 😂😂😂",
+    message: "Commodo consequat pariatur amet proident sit ullamco aute esse laborum minim eu do 😂😂😂 Et proident et irure anim mollit qui cillum.   ",
     profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
     userId: 2,
   },
   {
     message: "Exercitation adipisicing exercitation qui nostrud occaecat non excepteur ex sunt.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Nostrud eu aliqua nisi qui eiusmod magna consectetur.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Nostrud magna sit magna velit enim pariatur laboris.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Ad est ipsum veniam officia.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Voluptate dolor ea sint mollit velit nostrud mollit ad ipsum occaecat sint dolor officia occaecat 😂",
     profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
     userId: 1,
   },

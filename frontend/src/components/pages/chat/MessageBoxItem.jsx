@@ -10,11 +10,19 @@ const MessageBoxItem = ({ item }) => {
   }
 
   return <div className="other-message-box-item">
-    <img
-      src={item.profilePicture}
-      className="img-fluid profile-picture"
-    />
-    {item.message}
+    <div className="container">
+      <div className="row">
+        <div className="col-md-1">
+          <img
+            src={item.profilePicture}
+            className="img-fluid profile-picture"
+          />
+        </div>
+        <div className="col-md-11">
+          {item.message}
+        </div>
+      </div>
+    </div>
   </div>
 }
 

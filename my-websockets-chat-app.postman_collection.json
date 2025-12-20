@@ -515,6 +515,24 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "List",
+							"item": [
+								{
+									"name": "Bearer Token Restricted",
+									"item": [
+										{
+											"name": "Get Chat List",
+											"request": {
+												"method": "GET",
+												"header": []
+											},
+											"response": []
+										}
+									]
+								}
+							]
 						}
 					]
 				},

@@ -11,7 +11,7 @@ const {
   encrypt,
   compare,
 } = require("../../utils/tokens");
-const { validEmailRegex, } = require("../../utils/regexes");
+const { validEmailRegex, integerNumberRegex, } = require("../../utils/regexes");
 const { mysqlTimeFormat, } = require("../../utils/time");
 
 module.exports = (sequelize, DataTypes) => {
@@ -909,6 +909,136 @@ module.exports = (sequelize, DataTypes) => {
         }
         return res;
       }
+    }
+
+    /**
+     * @param {number} authenticatedUsersID
+     * @param {string} query [query=""]
+     * @param {string[]} excludingIDs [excludingIDs=[]]
+     * @param {number} page [page=1]
+     * @param {number} perPage [perPage=7]
+     * @returns {Object|false}
+     */
+    static async searchUsersPaginated(
+      authenticatedUsersID,
+      query="",
+      excludingIDs = [],
+      page = 1,
+      perPage = 7,
+    ) {
+      page -= 1;
+      const offset = page * perPage;
+      try {
+        const countResult = await sequelize.query(
+          `SELECT count(id) as total
+            FROM ${this.getTableName()}
+            WHERE (
+              firstName LIKE :searchQuery OR
+              lastName LIKE :searchQuery
+            ) AND id != :authenticatedUsersID
+              AND id NOT IN (:excludingIDs);
+          `,
+          {
+            replacements: {
+              searchQuery: `%${query}%`,
+              excludingIDs: excludingIDs,
+              authenticatedUsersID,
+            },
+            type: sequelize.QueryTypes.SELECT,
+          }
+        );
+        
+        if (0 === countResult[0].total) {
+          page += 1;
+          return {
+            data: [],
+            meta: {
+              currentPage: page,
+              items: countResult[0].total,
+              pages: 0,
+              perPage,
+            },
+          }
+        }
+
+        const coreResults = await sequelize.query(
+          `SELECT *
+            FROM ${this.getTableName()}
+            WHERE (
+              firstName LIKE :searchQuery OR
+              lastName LIKE :searchQuery
+            ) AND id != :authenticatedUsersID
+              AND id NOT IN (:excludingIDs)
+            ORDER BY id DESC
+            LIMIT :perPage
+            OFFSET :offset
+          `,
+          {
+            replacements: {
+              searchQuery: `%${query}%`,
+              excludingIDs: excludingIDs,
+              offset,
+              perPage,
+              authenticatedUsersID,
+            },
+            type: sequelize.QueryTypes.SELECT,
+          }
+        );
+        
+        page += 1;
+        return {
+          data: this.getFormattedUsersData(coreResults),
+          meta: {
+            currentPage: page,
+            items: countResult[0].total,
+            pages: Math.ceil(countResult[0].total / perPage),
+            perPage,
+          },
+        }
+      } catch (err) {
+        if ('production' !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
+
+    /**
+     * @param {Object} queryInput
+     * @param {*} queryInput.query A string
+     * @returns {false|string}
+     */
+    static getSearchUsersError(queryInput) {
+      if (undefined !== queryInput.query) {
+        if ("string" !== typeof queryInput.query) {
+          return "The search query must be of type string.";
+        } else if (50 < queryInput.query.length) {
+          return "The search query length must be less than 51 characters.";
+        }
+      }
+      if (undefined !== queryInput.excludingIDs) {
+        if (!Array.isArray(queryInput.excludingIDs)) {
+          return "The excluding IDs field must be of type array.";
+        } else {
+          for (const id of queryInput.excludingIDs) {
+            if (null === `${id}`.match(integerNumberRegex)) {
+              return "All excluding IDs must be integers.";
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    /**
+     * @param {Object} payload
+     * @returns {Object}
+     */
+    static getCleanSearchUsersData(payload) {
+      return {
+        query: payload.query || "",
+        excludingIDs: payload.excludingIDs || "",
+      };
     }
   }
   

@@ -564,6 +564,61 @@
 					]
 				},
 				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Bearer Token Restricted",
+							"item": [
+								{
+									"name": "Search Users List",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{web}}/users/search",
+											"host": [
+												"{{web}}"
+											],
+											"path": [
+												"users",
+												"search"
+											],
+											"query": [
+												{
+													"key": "excludingIDs[]",
+													"value": "4",
+													"disabled": true
+												},
+												{
+													"key": "excludingIDs[]",
+													"value": "3",
+													"disabled": true
+												},
+												{
+													"key": "query",
+													"value": "juliet",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "Get Users",
 					"request": {
 						"method": "GET",

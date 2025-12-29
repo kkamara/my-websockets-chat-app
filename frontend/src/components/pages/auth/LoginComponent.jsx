@@ -88,6 +88,7 @@ export default function LoginComponent() {
             className="form-control"
             value={email}
             onChange={onEmailChange}
+            autoComplete="on"
           >
             {users.map(user => (
               <option key={user.id} value={user.email}>{user.email}</option>

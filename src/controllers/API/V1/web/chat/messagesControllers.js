@@ -126,8 +126,16 @@ const createMessage = asyncHandler(async (req, res) => {
     res.status(status.INTERNAL_SERVER_ERROR);
     throw new Error("Unable to create chat message.");
   }
+
+  const message = await db.sequelize.models
+    .chatMessage
+    .getChatMessage(createdMessage.chatMessageID);
+  if (false === message) {
+    res.status(status.INTERNAL_SERVER_ERROR);
+    throw new Error("Unable to get created chat message.");
+  }
   
-  return res.json({ message: message200 });
+  return res.json({ data: message });
 });
 
 module.exports = { getMessages, createMessage, };

@@ -142,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
       content,
     ) {
       try {
-        await sequelize.query(
+        const result = await sequelize.query(
           `INSERT INTO ${this.getTableName()}(senderID, chatID, content, createdAt, updatedAt)
             VALUES(:senderID, :chatID, :content, :createdAt, :updatedAt);`,
           {
@@ -157,7 +157,41 @@ module.exports = (sequelize, DataTypes) => {
           },
         );
 
-        return true;
+        return { chatMessageID: result[0] };
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
+
+    /**
+     * @param {number} id
+     * @returns {Object|false}
+     */
+    static async getChatMessage(id) {
+      try {
+        const result = await sequelize.query(
+          `SELECT ${this.getTableName()}.id AS chatMessageID, ${this.getTableName()}.senderID,
+              ${this.getTableName()}.content, ${this.getTableName()}.chatID,
+              ${this.getTableName()}.createdAt, ${this.getTableName()}.updatedAt,
+              ${sequelize.models.user.getTableName()}.firstName, ${sequelize.models.user.getTableName()}.lastName,
+              ${sequelize.models.user.getTableName()}.email, ${sequelize.models.user.getTableName()}.avatarName
+            FROM ${this.getTableName()}
+            RIGHT JOIN ${sequelize.models.chat.getTableName()}
+              ON ${sequelize.models.chat.getTableName()}.id = ${this.getTableName()}.chatID
+            RIGHT JOIN ${sequelize.models.user.getTableName()}
+              ON ${sequelize.models.user.getTableName()}.id = ${this.getTableName()}.senderID
+            WHERE ${this.getTableName()}.id=:id
+              AND ${this.getTableName()}.deletedAt IS NULL;`,
+          {
+            replacements: { id, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        return this.getFormattedChatMessageData(result[0]);
       } catch(err) {
         if ("production" !== nodeEnv) {
           console.log(err);

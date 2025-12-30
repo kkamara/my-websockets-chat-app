@@ -13,6 +13,7 @@ const {
 } = require("../../utils/tokens");
 const { validEmailRegex, integerNumberRegex, } = require("../../utils/regexes");
 const { mysqlTimeFormat, } = require("../../utils/time");
+const { defaultAvatarPath } = require('../../utils/file');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -509,7 +510,7 @@ module.exports = (sequelize, DataTypes) => {
         email: data.email,
         avatarPath: data.avatarName ?
           appURL+"/images/profile/"+data.avatarName :
-          appURL+"/images/profile/default-avatar.webp",
+          defaultAvatarPath,
         createdAt: moment(data.createdAt)
           .tz(appTimezone)
           .format(mysqlTimeFormat),

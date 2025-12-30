@@ -323,6 +323,27 @@ module.exports = (sequelize, DataTypes) => {
       }
       return formattedChatList;
     }
+
+    /**
+     * @param {*} chatID
+     * @returns {false|string}
+     */
+    static getChatMessagesError(chatID) {
+      if (null === `${chatID}`.match(integerNumberRegex)) {
+        return "Chat ID must be a whole number.";
+      }
+      return false;
+    }
+
+    /**
+     * @param {number} chatID
+     * @returns {Object}
+     */
+    static getChatMessagesData(chatID) {
+      return {
+        chatID,
+      };
+    }
   }
   chat.init({
     chatName: {

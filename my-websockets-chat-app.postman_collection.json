@@ -513,6 +513,34 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Get Messages",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{web}}/chat/11",
+											"host": [
+												"{{web}}"
+											],
+											"path": [
+												"chat",
+												"11"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},

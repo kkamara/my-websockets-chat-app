@@ -191,6 +191,34 @@ module.exports = (sequelize, DataTypes) => {
         return false;
       }
     }
+
+    /**
+     * @param {number} chatID
+     * @returns {Object|false}
+     */
+    static async getChatUsers(chatID) {
+      try {
+        const results = await sequelize.query(
+          `SELECT ${this.getTableName()}.id AS chatUserID, ${this.getTableName()}.chatID,
+              ${this.getTableName()}.userID, ${this.getTableName()}.createdAt,
+              ${this.getTableName()}.updatedAt
+            FROM ${this.getTableName()}
+            WHERE ${this.getTableName()}.chatID=:chatID
+              AND ${this.getTableName()}.deletedAt IS NULL`,
+          {
+            replacements: { chatID, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+
+        return results;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
   }
   chatUsers.init({
     chatID: {

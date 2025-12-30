@@ -1,5 +1,6 @@
 "use strict";
 const { rmSync, renameSync, } = require("node:fs");
+const { appURL } = require("../config");
 
 exports.removeFile = async path => {
   rmSync(path);
@@ -40,3 +41,6 @@ exports.getUploadPhotoError = file => {
 exports.moveFile = (from, to) => {
   renameSync(from, to);
 };
+
+exports.defaultAvatarPath =
+  `${appURL}/images/profile/default-avatar.webp`;

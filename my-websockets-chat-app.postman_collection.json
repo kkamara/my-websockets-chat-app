@@ -541,6 +541,43 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Create Message",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"content\": \"My first message.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{web}}/chat/11",
+											"host": [
+												"{{web}}"
+											],
+											"path": [
+												"chat",
+												"11"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},

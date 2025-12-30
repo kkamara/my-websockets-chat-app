@@ -337,7 +337,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * @param {number} chatID
-     * @returns {Object}
+     * @returns {Object|false}
      */
     static getChatMessagesData(chatID) {
       return {

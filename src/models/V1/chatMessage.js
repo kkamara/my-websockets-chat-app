@@ -2,8 +2,15 @@
 const {
   Model
 } = require('sequelize');
-const { nodeEnv, } = require('../../config');
+const moment = require("moment-timezone");
+const {
+  nodeEnv,
+  appTimezone,
+  appURL,
+} = require('../../config');
 const { defaultAvatarPath } = require('../../utils/file');
+const { integerNumberRegex } = require('../../utils/regexes');
+const { mysqlTimeFormat } = require('../../utils/time');
 module.exports = (sequelize, DataTypes) => {
   class chatMessage extends Model {
     /**
@@ -34,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
               ON ${sequelize.models.user.getTableName()}.id = ${this.getTableName()}.senderID
             WHERE ${this.getTableName()}.chatID=:chatID
               AND ${this.getTableName()}.deletedAt IS NULL
-            ORDER BY ${this.getTableName()}.createdAt ASC;`,
+            ORDER BY ${this.getTableName()}.id ASC;`,
           {
             replacements: { chatID, },
             type: sequelize.QueryTypes.SELECT,
@@ -89,6 +96,74 @@ module.exports = (sequelize, DataTypes) => {
           .tz(appTimezone)
           .format(mysqlTimeFormat),
       };
+    }
+
+    static getCreateChatMessageError(chatID, content) {
+      if (null === `${chatID}`.match(integerNumberRegex)) {
+        return "Chat ID must be a whole number.";
+      }
+      if (undefined === content) {
+        return "Message content is required.";
+      } else if ("string" !== typeof content) {
+        return "Message content must be a string.";
+      } else if (0 === content.trim().length) {
+        return "Message content cannot be empty.";
+      } else if (content.trim().length > 500) {
+        return "Message content cannot exceed 500 characters.";
+      }
+      return false;
+    }
+
+    /**
+     * @param {number} chatID
+     * @param {string} content
+     * @returns {Object|false}
+     */
+    static getCreateChatMessageData(chatID, content) {
+      const res = {
+        chatID,
+      };
+      if (!content) {
+        return false;
+      }
+      res.content = content.trim();
+      return res;
+    }
+
+    /**
+     * @param {number} userID
+     * @param {number} chatID
+     * @param {string} content
+     * @returns {Object|false}
+     */
+    static async createChatMessage(
+      userID,
+      chatID,
+      content,
+    ) {
+      try {
+        await sequelize.query(
+          `INSERT INTO ${this.getTableName()}(senderID, chatID, content, createdAt, updatedAt)
+            VALUES(:senderID, :chatID, :content, :createdAt, :updatedAt);`,
+          {
+            replacements: {
+              chatID,
+              content,
+              senderID: userID,
+              createdAt: moment().tz(appTimezone).format(mysqlTimeFormat),
+              updatedAt: moment().tz(appTimezone).format(mysqlTimeFormat),
+            },
+            type: sequelize.QueryTypes.INSERT,
+          },
+        );
+
+        return true;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
     }
   }
   chatMessage.init({

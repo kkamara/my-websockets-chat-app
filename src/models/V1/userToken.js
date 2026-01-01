@@ -282,7 +282,7 @@ module.exports = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.STRING
     },
-    expiredAt: {
+    expiresAt: {
       allowNull: false,
       type: DataTypes.DATE
     },

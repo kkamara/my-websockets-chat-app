@@ -134,6 +134,10 @@ const createMessage = asyncHandler(async (req, res) => {
     res.status(status.INTERNAL_SERVER_ERROR);
     throw new Error("Unable to get created chat message.");
   }
+
+  await db.sequelize.models
+    .chat
+    .updateChatTimestamp(cleanData.chatID);
   
   return res.json({ data: message });
 });

@@ -344,6 +344,39 @@ module.exports = (sequelize, DataTypes) => {
         chatID,
       };
     }
+    
+    /**
+     * @param {number} id
+     * @returns {boolean}
+     */
+    static async updateChatTimestamp(id) {
+      try {
+        const result = await sequelize.query(
+          `UPDATE ${this.getTableName()}
+            SET updatedAt = :updatedAt
+            WHERE id = :id`,
+          {
+            replacements: {
+              updatedAt: moment()
+                .utc()
+                .format(mysqlTimeFormat),
+              id,
+            },
+            type: sequelize.QueryTypes.UPDATE,
+          },
+        );
+        const rowsUpdated = result[1];
+        if (0 === rowsUpdated) {
+          return false;
+        }
+        return true;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return false;
+      }
+    }
   }
   chat.init({
     chatName: {

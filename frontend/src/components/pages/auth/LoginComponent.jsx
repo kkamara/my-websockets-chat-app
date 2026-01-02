@@ -2,7 +2,7 @@ import React, { useEffect, useState, } from "react"
 import { useDispatch, useSelector, } from "react-redux"
 import { Helmet, } from "react-helmet"
 import { login, authorise, } from "../../../redux/actions/authActions"
-import Error from "../../layouts/Error"
+import ErrorComponent from "../../layouts/ErrorComponent"
 import axios from "axios"
 
 import "./LoginComponent.scss"
@@ -80,7 +80,7 @@ export default function LoginComponent() {
     <div className="col-md-4 offset-md-4">
       <h1 className="login-lead fw-bold">Sign In</h1>
       <form method="post" onSubmit={onFormSubmit}>
-        <Error error={state.auth.error} />
+        <ErrorComponent error={state.auth.error} />
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <select 

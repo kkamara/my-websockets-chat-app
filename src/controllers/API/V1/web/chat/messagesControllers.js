@@ -2,7 +2,7 @@
 const asyncHandler = require("express-async-handler");
 const db = require("../../../../../models/V1");
 const { default: status } = require("http-status");
-const { message400, message200 } = require("../../../../../utils/httpResponses");
+const { message400, } = require("../../../../../utils/httpResponses");
 
 const getMessages = asyncHandler(async (req, res) => {
   const inputError = db.sequelize.models

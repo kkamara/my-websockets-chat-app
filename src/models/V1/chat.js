@@ -111,6 +111,10 @@ module.exports = (sequelize, DataTypes) => {
           return "Chat name must be a string.";
         } else if (bodyInput.chatName.trim().length > 50) {
           return "Chat name must not exceed 50 characters.";
+        } else if (0 === bodyInput.chatName.trim().length) {
+          return "Chat name cannot be an empty string.";
+        } else if (3 > bodyInput.chatName.trim().length) {
+          return "Chat name must be at least 3 characters.";
         }
       }
       if (undefined === bodyInput.userIDs) {
@@ -148,7 +152,7 @@ module.exports = (sequelize, DataTypes) => {
         return false;
       }
       return {
-        chatName: chatName ?? null,
+        chatName: chatName ? chatName.trim() : null,
         userIDs,
       };
     }

@@ -1,5 +1,6 @@
 import React from 'react'
 import RenderSidebarItem from './RenderSidebarItem'
+import AddChatComponent from './AddChatComponent'
 
 import "./ChatSidebar.scss"
 
@@ -50,9 +51,7 @@ const data = [
 
 const ChatSidebar = () => {
   return <div className="chat-sidebar-container">
-    <button className="btn btn-default btn-lg">
-      Add Chat <i className="fa-solid fa-plus"></i>
-    </button>
+    <AddChatComponent/>
     <br/>
     {data.map((d, index) => (
       <RenderSidebarItem key={index} item={d}/>

@@ -4,6 +4,7 @@ import usersReducer from "./usersReducer"
 import avatarReducer from "./avatarReducer"
 import updateUserSettingsReducer from "./updateUserSettingsReducer"
 import removeAvatarReducer from "./removeAvatarReducer"
+import chatListReducer from "./chatListReducer"
 
 export default combineReducers({
   auth: authReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   avatar: avatarReducer,
   updateUserSettings: updateUserSettingsReducer,
   removeAvatar: removeAvatarReducer,
+  chatList: chatListReducer,
 })

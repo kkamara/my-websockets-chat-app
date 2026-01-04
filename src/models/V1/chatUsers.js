@@ -112,8 +112,11 @@ module.exports = (sequelize, DataTypes) => {
         const result = await sequelize.query(
           `SELECT ${this.getTableName()}.id AS chatUserID, ${this.getTableName()}.chatID,
               ${this.getTableName()}.userID, ${this.getTableName()}.createdAt,
-              ${this.getTableName()}.updatedAt
+              ${this.getTableName()}.updatedAt, ${sequelize.models.user.getTableName()}.firstName,
+              ${sequelize.models.user.getTableName()}.lastName, ${sequelize.models.user.getTableName()}.email
             FROM ${this.getTableName()}
+            LEFT JOIN ${sequelize.models.user.getTableName()}
+              ON ${this.getTableName()}.userID=${sequelize.models.user.getTableName()}.id
             WHERE ${this.getTableName()}.chatID=:chatID
               AND ${this.getTableName()}.userID != :excludingUserID
               AND ${this.getTableName()}.deletedAt IS NULL
@@ -138,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
      * @returns {Object}
      */
     static getFormattedChatUserData(payload) {
-      return {
+      const res = {
         chatID: payload.chatID,
         userID: payload.userID,
         createdAt: moment(payload.createdAt)
@@ -148,6 +151,16 @@ module.exports = (sequelize, DataTypes) => {
           .tz(appTimezone)
           .format(mysqlTimeFormat),
       };
+      if (payload.firstName) {
+        res.firstName = payload.firstName;
+      }
+      if (payload.lastName) {
+        res.lastName = payload.lastName;
+      }
+      if (payload.email) {
+        res.email = payload.email;
+      }
+      return res;
     }
 
     /**

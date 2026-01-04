@@ -3,12 +3,20 @@ import React from 'react'
 import "./RenderSidebarItem.scss"
 
 const RenderSidebarItem = ({ item }) => {
-  const chatName = item.isGroupChat ?
-    item.chatName :
-    item.friendUserName
+  function getChatName(item) {
+    let result = item.isGroupChat ?
+      item.chatName :
+      `${item.to.firstName} ${item.to.lastName}`
+    if (result) {
+      return result
+    }
+    result = `${item.to.length + 1} users with chat ID ${item.id}`
+    return result
+  }
+
   return (
     <button className="btn btn-primary sidebar-item">
-      {chatName}
+      {getChatName(item)}
     </button>
   )
 }

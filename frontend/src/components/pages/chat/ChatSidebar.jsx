@@ -1,59 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect, } from 'react'
 import RenderSidebarItem from './RenderSidebarItem'
 import AddChatModalComponent from './AddChatModalComponent'
+import { useSelector, useDispatch } from 'react-redux'
+import { getChatList } from '../../../redux/actions/chatListActions'
 
 import "./ChatSidebar.scss"
 
-const data = [
-  {
-    chatName: null,
-    friendUserName: "John Doe"
-  },
-  {
-    chatName: "Qui reprehenderit eu Lorem culpa sint consequat esse qui officia excepteur sunt esse duis.",
-    friendUserName: null,
-    isGroupChat: true,
-  },
-  {
-    chatName: null,
-    friendUserName: "John Smith"
-  },
-  {
-    chatName: null,
-    friendUserName: "James Doe"
-  },
-  {
-    chatName: null,
-    friendUserName: "Mike Doe"
-  },
-  {
-    chatName: null,
-    friendUserName: "Jannine Doe"
-  },
-  {
-    chatName: null,
-    friendUserName: "Johnny Doe"
-  },
-  {
-    chatName: null,
-    friendUserName: "Clarissa Doe"
-  },
-  {
-    chatName: null,
-    friendUserName: "Sarah Doe"
-  },
-  {
-    chatName: "Consequat nulla sit esse aute labore.",
-    isGroupChat: true,
-    friendUserName: null
-  },
-]
-
 const ChatSidebar = () => {
+  const [loading, setLoading] = useState(false)
+
+  const chatListState = useSelector(state => state.chatList)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    setLoading(true)
+    loadData()
+  }, [])
+
+  useEffect(() => {
+    if (false === chatListState.loading) {
+      setLoading(false)
+    }
+  }, [chatListState])
+
+  const loadData = async () => {
+    dispatch(getChatList())
+  }
+
+  if (loading || chatListState.loading) {
+    return null
+  }
+  
   return <div className="chat-sidebar-container">
     <AddChatModalComponent/>
     <br/>
-    {data.map((d, index) => (
+    {chatListState.data.map((d, index) => (
       <RenderSidebarItem key={index} item={d}/>
     ))}
   </div>

@@ -3,12 +3,14 @@ import ScrollableFeed from 'react-scrollable-feed'
 import MessageBoxItem from './MessageBoxItem'
 import { useSelector, useDispatch, } from 'react-redux'
 import { setOpenChat } from '../../../redux/actions/openChatActions'
+import { getMessages } from '../../../redux/actions/messagesActions'
 
 import "./MessageBoxComponent.scss"
 
 const MessageBoxComponent = () => {
   const state = useSelector(state => ({
-    openChat: state.openChat
+    openChat: state.openChat,
+    messages: state.messages,
   }))
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
@@ -16,6 +18,7 @@ const MessageBoxComponent = () => {
   useEffect(() => {
     if (false === state.openChat.loading && state.openChat.data) {
       setOpen(true)
+      dispatch(getMessages(state.openChat.data.id))
     }
   }, [state.openChat])
 
@@ -27,6 +30,12 @@ const MessageBoxComponent = () => {
   if (false === open) {
     return (
       <div>Choose a friend or group chat to chat.</div>
+    )
+  }
+
+  if (state.messages.loading) {
+    return (
+      <div>Loading messages...</div>
     )
   }
 
@@ -42,9 +51,9 @@ const MessageBoxComponent = () => {
 
     <div className="messages">
       <ScrollableFeed>
-        {/* {data.map((d, index) => (
-          <MessageBoxItem key={index} item={d}/>
-        ))} */}
+        {state.messages.data.messages.map((m, index) => (
+          <MessageBoxItem key={index} item={m}/>
+        ))}
       </ScrollableFeed>
     </div>
 

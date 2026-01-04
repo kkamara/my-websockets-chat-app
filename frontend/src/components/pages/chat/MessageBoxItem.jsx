@@ -3,9 +3,10 @@ import React from 'react'
 import "./MessageBoxItem.scss"
 
 const MessageBoxItem = ({ item }) => {
-  if (1 === item.userId) {
+  const authUsersID = localStorage.getItem("user-id")
+  if (authUsersID == item.sender.id) {
     return <div className="my-message-box-item">
-      {item.message}
+      {item.content}
     </div>
   }
 
@@ -14,12 +15,12 @@ const MessageBoxItem = ({ item }) => {
       <div className="row">
         <div className="col-md-1">
           <img
-            src={item.profilePicture}
+            src={item.avatarPath}
             className="img-fluid profile-picture"
           />
         </div>
         <div className="col-md-11">
-          {item.message}
+          {item.content}
         </div>
       </div>
     </div>

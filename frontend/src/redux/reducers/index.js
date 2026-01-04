@@ -11,6 +11,7 @@ import createGroupChatReducer from "./createGroupChatReducer"
 import openChatReducer from "./openChatReducer"
 import messagesReducer from "./messagesReducer"
 import createMessageReducer from "./createMessageReducer"
+import notificationsReducer from "./notificationsReducer"
 
 export default combineReducers({
   auth: authReducer,
@@ -25,4 +26,5 @@ export default combineReducers({
   openChat: openChatReducer,
   messages: messagesReducer,
   createMessage: createMessageReducer,
+  notifications: notificationsReducer,
 })

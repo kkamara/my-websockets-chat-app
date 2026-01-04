@@ -1,41 +1,81 @@
-import React from "react"
-import { useSelector, } from "react-redux"
+import React, { useEffect, } from "react"
+import { useDispatch, useSelector, } from "react-redux"
 import { Link, } from "react-router-dom"
+import Badge from 'react-badger'
+import { getNotifications, } from "../../redux/actions/notificationsActions"
 
 import "./Header.scss"
 
-export default function Header(props) {
-  const authResponse = useSelector(state=>state.auth)
+export default function Header() {
+  const state = useSelector(state => ({
+    auth: state.auth,
+    notifications: state.notifications,
+  }))
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getNotifications())
+  }, [])
+
+  useEffect(() => {
+    if (false === state.notifications.loading) {
+      console.log("Notifications updated: ", state.notifications.data)
+    }
+  }, [state.notifications.data])
+
+  const renderNotifications = () => {
+    return <li className="nav-item dropdown">
+      <a className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i className="fa-solid fa-bell"></i>
+        <Badge>{state.notifications.data.length}</Badge>
+      </a>
+      <ul className="dropdown-menu">
+        {state.notifications.data.map((notification, index) => (
+          <li key={index}>
+            <Link
+              className="dropdown-item" 
+              to={`/chat?chatID=${notification.chatID}`}
+            >
+              {notification.content.slice(0, 10)}...
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </li>
+  }
 
   const renderNavLinks = () => {
-    if(null !== authResponse.data) {
-      return <li className="nav-item dropdown">
-        <a className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img
-            className="header-user-avatar"
-            src={authResponse.data.user.avatarPath}
-          />
-          User
-        </a>
-        <ul className="dropdown-menu">
-          <li>
-            <Link
-              className="dropdown-item" 
-              to="/user/settings"
-            >
-              Settings
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="dropdown-item" 
-              to="/user/logout"
-            >
-              Sign Out
-            </Link>
-          </li>
-        </ul>
-      </li>
+    if(null !== state.auth.data) {
+      return <>
+        {renderNotifications()}
+        <li className="nav-item dropdown">
+          <a className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+              className="header-user-avatar"
+              src={state.auth.data.user.avatarPath}
+            />
+            User
+          </a>
+          <ul className="dropdown-menu">
+            <li>
+              <Link
+                className="dropdown-item" 
+                to="/user/settings"
+              >
+                Settings
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="dropdown-item" 
+                to="/user/logout"
+              >
+                Sign Out
+              </Link>
+            </li>
+          </ul>
+        </li>
+      </>
     } else {
       return <>
         <li className="nav-item">
@@ -59,6 +99,11 @@ export default function Header(props) {
       </>
     }
   }
+
+  if (state.auth.loading || state.notifications.loading) {
+    return null
+  }
+
   return <nav className="navbar navbar-expand-lg mb-4 bg-primary header-container" data-bs-theme="dark">
     <div className="container">
       <Link className="navbar-brand" to="/">

@@ -8043,6 +8043,14 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
+react-badger@^2.0.30:
+  version "2.0.30"
+  resolved "https://registry.yarnpkg.com/react-badger/-/react-badger-2.0.30.tgz#1a5b5442fe4b665a50d0c3a917b81715e1cee024"
+  integrity sha512-sLUyMtQmPRi0brMli02CXemehsph+WxZAptegaDRyh9Xsj7uyKX3FzLIljI/BkpIpx3g9IDqrQPEP7d4M5tiEw==
+  dependencies:
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
 react-bootstrap@^2.7:
   version "2.10.7"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-2.10.7.tgz#63954e8faa6f0d28d9c755e5f8fbd27b5b09764a"

@@ -8,6 +8,7 @@ import { createMessageAction } from '../../../redux/actions/createMessageActions
 import io from "socket.io-client"
 import Lottie from 'react-lottie'
 import animationData from '../../../animations/typing.json'
+import { setNotifications, } from '../../../redux/actions/notificationsActions'
 
 import "./MessageBoxComponent.scss"
 
@@ -27,6 +28,7 @@ const MessageBoxComponent = () => {
     openChat: state.openChat,
     messages: state.messages,
     createMessage: state.createMessage,
+    notifications: state.notifications,
   }))
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
@@ -81,21 +83,23 @@ const MessageBoxComponent = () => {
 
   useEffect(() => {
     socket.on("message received", newMessageReceived => {
-      // if (
-      //   !selectedChatCompare ||
-      //   selectedChatCompare._id !== newMessageReceived.chat._id
-      // ) {
-      //   if (!notification.includes(newMessageReceived)) {
-      //     setNotification([newMessageReceived, ...notification]);
-      //     setFetchAgain(!fetchAgain);
-      //   }
-      // } else {
-        setMessages([...messages, newMessageReceived]);
-      // }
-    });
+      if (
+        null === state.openChat.data ||
+        state.openChat.data.id !== newMessageReceived.chatID
+      ) {
+        const isNewNotification = state.notifications.data.filter(
+          n => n.id === newMessageReceived.id
+        ).length === 0
+        if (isNewNotification) {
+          dispatch(setNotifications([newMessageReceived, ...state.notifications.data]))
+        }
+      } else {
+        setMessages([...messages, newMessageReceived])
+      }
+    })
     return () => {
-      socket.off("message received");
-    };
+      socket.off("message received")
+    }
   })
 
   const handleCloseMessageBox = () => {

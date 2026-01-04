@@ -381,6 +381,61 @@ module.exports = (sequelize, DataTypes) => {
         return false;
       }
     }
+    
+    /**
+     * @param {number} authenticatedUserID 
+     * @param {number} queryUserID 
+     * @returns {boolean}
+     */
+    static async checkChatExists(authenticatedUserID, queryUserID) {
+      let res = false;
+      try {
+        const authChatUsers = await sequelize.query(
+          `SELECT ${this.getTableName()}.id
+            FROM ${this.getTableName()}
+            LEFT JOIN ${sequelize.models.chatUsers.getTableName()}
+              ON ${this.getTableName()}.id = ${sequelize.models.chatUsers.getTableName()}.chatID
+            WHERE ${sequelize.models.chatUsers.getTableName()}.userID=:authenticatedUserID
+              AND ${this.getTableName()}.isGroupChat=0
+              AND ${sequelize.models.chatUsers.getTableName()}.deletedAt IS NULL
+              AND ${this.getTableName()}.deletedAt IS NULL
+            LIMIT 1`,
+          {
+            replacements: { authenticatedUserID, },
+            type: sequelize.QueryTypes.SELECT,
+          },
+        );
+console.log(authChatUsers)
+        for (const chat of authChatUsers) {
+          const chatWithQueryUser = await sequelize.query(
+            `SELECT *
+              FROM ${sequelize.models.chatUsers.getTableName()}
+              WHERE ${sequelize.models.chatUsers.getTableName()}.chatID=:chatID
+                AND ${sequelize.models.chatUsers.getTableName()}.userID=:queryUserID
+                AND ${sequelize.models.chatUsers.getTableName()}.deletedAt IS NULL
+              LIMIT 1`,
+            {
+              replacements: {
+                chatID: chat.id,
+                queryUserID,
+              },
+              type: sequelize.QueryTypes.SELECT,
+            },
+          );
+          console.log(chatWithQueryUser)
+          if (0 < chatWithQueryUser.length) {
+            res = true;
+            return res;
+          }
+        }
+        return res;
+      } catch(err) {
+        if ("production" !== nodeEnv) {
+          console.log(err);
+        }
+        return res;
+      }
+    }
   }
   chat.init({
     chatName: {

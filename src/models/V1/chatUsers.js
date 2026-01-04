@@ -53,56 +53,6 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * @param {number} authenticatedUserID 
-     * @param {number} queryUserID 
-     * @returns {boolean}
-     */
-    static async checkChatExists(authenticatedUserID, queryUserID) {
-      let res = false;
-      try {
-        const authChatUsers = await sequelize.query(
-          `SELECT *
-            FROM ${this.getTableName()}
-            WHERE ${this.getTableName()}.userID=:authenticatedUserID
-              AND ${this.getTableName()}.deletedAt IS NULL
-            LIMIT 1`,
-          {
-            replacements: { authenticatedUserID, },
-            type: sequelize.QueryTypes.SELECT,
-          },
-        );
-
-        for (const chat of authChatUsers) {
-          const chatWithQueryUser = await sequelize.query(
-            `SELECT *
-              FROM ${this.getTableName()}
-              WHERE ${this.getTableName()}.chatID=:chatID
-                AND ${this.getTableName()}.userID=:queryUserID
-                AND ${this.getTableName()}.deletedAt IS NULL
-              LIMIT 1`,
-            {
-              replacements: {
-                chatID: chat.chatID,
-                queryUserID,
-              },
-              type: sequelize.QueryTypes.SELECT,
-            },
-          );
-          if (0 < chatWithQueryUser.length) {
-            res = true;
-            return res;
-          }
-        }
-        return res;
-      } catch(err) {
-        if ("production" !== nodeEnv) {
-          console.log(err);
-        }
-        return res;
-      }
-    }
-
-    /**
      * @param {number} chatID
      * @param {number} excludingUserID
      * @returns {Object|false}

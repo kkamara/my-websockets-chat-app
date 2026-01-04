@@ -32,7 +32,6 @@ const users = [
 const AddChatComponent = () => {
   const [modalIsOpen, setIsOpen] = useState(false)
 
-  const [query, setQuery] = useState("")
   const [selectedUsers, setSelectedUsers] = useState([])
   const [chatGroupName, setChatGroupName] = useState("")
 
@@ -54,10 +53,6 @@ const AddChatComponent = () => {
 
   function handleSubmit() {
     setIsOpen(false);
-  }
-
-  function handleQueryChange(e) {
-    setQuery(e.target.value)
   }
 
   function handleUpdateUser(e) {
@@ -92,22 +87,6 @@ const AddChatComponent = () => {
             <hr />
             <ErrorComponent error={error} />
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="query">Search Users</label>
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    id="add-chat-query"
-                    name="query"
-                    className="form-control"
-                    value={query}
-                    onChange={handleQueryChange}
-                  />
-                  <button className="btn btn-info">
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                  </button>
-                </div>
-              </div>
               <div className="form-group add-chat-users-list-container">
                 <ul className="add-chat-users-list">
                   {users.map((user, index) => (

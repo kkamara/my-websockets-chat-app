@@ -12,6 +12,7 @@ const MessageBoxComponent = () => {
   const state = useSelector(state => ({
     openChat: state.openChat,
     messages: state.messages,
+    createMessage: state.createMessage,
   }))
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
@@ -31,6 +32,12 @@ const MessageBoxComponent = () => {
       setMessages(state.messages.data.messages)
     }
   }, [state.messages])
+
+  useEffect(() => {
+    if (false === state.createMessage.loading && state.createMessage.data) {
+      setMessages([...messages, state.createMessage.data])
+    }
+  }, [state.createMessage])
 
   const handleCloseMessageBox = () => {
     dispatch(setOpenChat(null))

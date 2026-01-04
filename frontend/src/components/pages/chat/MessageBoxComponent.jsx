@@ -1,71 +1,26 @@
-import React, { useState, } from 'react'
+import React, { useState, useEffect, } from 'react'
 import ScrollableFeed from 'react-scrollable-feed'
+import MessageBoxItem from './MessageBoxItem'
+import { useSelector, useDispatch, } from 'react-redux'
+import { setOpenChat } from '../../../redux/actions/openChatActions'
 
 import "./MessageBoxComponent.scss"
-import MessageBoxItem from './MessageBoxItem'
-
-const data = [
-  {
-    message: "Ex non pariatur excepteur excepteur sit enim velit irure labore qui esse.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Culpa sunt est exercitation duis est proident aute id cupidatat nisi consectetur sit amet.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 2,
-  },
-  {
-    message: "Anim aute occaecat dolore Lorem laboris velit cupidatat cupidatat eiusmod sit.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Enim eiusmod aliquip ut consequat occaecat nisi.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Quis nulla elit anim est culpa occaecat culpa aliqua.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 2,
-  },
-  {
-    message: "Reprehenderit ea id in consectetur ut tempor id irure occaecat.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 2,
-  },
-  {
-    message: "Dolore culpa amet elit cupidatat esse nisi fugiat commodo id aute fugiat adipisicing consectetur aute.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Cupidatat non eiusmod nulla nisi anim adipisicing do nisi mollit ex do culpa.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Commodo consequat pariatur amet proident sit ullamco aute esse laborum minim eu do 😂😂😂 Et proident et irure anim mollit qui cillum.   ",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 2,
-  },
-  {
-    message: "Exercitation adipisicing exercitation qui nostrud occaecat non excepteur ex sunt.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-  {
-    message: "Est commodo velit cupidatat adipisicing.",
-    profilePicture: "http://localhost:8000/images/profile/default-avatar.webp",
-    userId: 1,
-  },
-]
 
 const MessageBoxComponent = () => {
-  const [open, setOpen] = useState(true)
+  const state = useSelector(state => ({
+    openChat: state.openChat
+  }))
+  const dispatch = useDispatch()
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (false === state.openChat.loading && state.openChat.data) {
+      setOpen(true)
+    }
+  }, [state.openChat])
 
   const handleCloseMessageBox = () => {
+    dispatch(setOpenChat(null))
     setOpen(false)
   }
 
@@ -87,9 +42,9 @@ const MessageBoxComponent = () => {
 
     <div className="messages">
       <ScrollableFeed>
-        {data.map((d, index) => (
+        {/* {data.map((d, index) => (
           <MessageBoxItem key={index} item={d}/>
-        ))}
+        ))} */}
       </ScrollableFeed>
     </div>
 

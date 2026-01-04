@@ -8,6 +8,7 @@ import chatListReducer from "./chatListReducer"
 import searchUsersListReducer from "./searchUsersListReducer"
 import createChatReducer from "./createChatReducer"
 import createGroupChatReducer from "./createGroupChatReducer"
+import openChatReducer from "./openChatReducer"
 
 export default combineReducers({
   auth: authReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   searchUsersList: searchUsersListReducer,
   createChat: createChatReducer,
   createGroupChat: createGroupChatReducer,
+  openChat: openChatReducer,
 })

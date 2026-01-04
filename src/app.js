@@ -55,11 +55,85 @@ app.get("*", (req, res) => {
 app.use(notFound);
 app.use(jsonError);
 
+let server;
 if ('production' === config.nodeEnv) {
-  app.listen(config.appPort);
+  server = app.listen(config.appPort);
 } else {
-  app.listen(config.appPort, () => {
+  server = app.listen(config.appPort, () => {
     const url = `http://127.0.0.1:${config.appPort}`;
     console.log(`Listening on ${url}`);
   });
 }
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+const socketStorage = {};
+
+io.on("connection", socket => {
+  console.log("Connected to socket.io");
+  console.log("socketStorage", socketStorage);
+  console.log("socket.id", socket.id);
+
+  socket.on("setup", userData => {
+    socketStorage[socket.id] = {
+      userID: userData.id,
+      rooms: [],
+    };
+    console.log("socketStorage after setup", socketStorage);
+    socket.join(userData.id);
+    socket.emit("connected");
+  });
+
+  socket.on("join chat", data => {
+    if (!socketStorage[socket.id]) {
+      socketStorage[socket.id] = {
+        userID: data.userID,
+        rooms: [],
+      };
+    }
+    socketStorage[socket.id].rooms.push(data.chatID);
+    socket.join(data.chatID);
+    console.log("User Joined Room: " + data.chatID);
+    console.log("socketStorage after join chat", socketStorage);
+  });
+
+  socket.on("new message", newMessageReceived => {
+    var chat = newMessageReceived;
+
+    if (!chat.to) {
+      return console.log("chat.to not defined");
+    }
+
+    chat.to.forEach(to => {
+      socket.in(to.userID).emit(
+        "message received",
+        newMessageReceived,
+      );
+    });
+  });
+
+  socket.on("typing", room => socket.in(room).emit("typing"));
+  socket.on(
+    "stop typing",
+    room => socket.in(room).emit("stop typing")
+  );
+
+  socket.on("disconnect", () => {
+    console.log("USER DISCONNECTED");
+    if (socketStorage[socket.id]) {
+      if (socketStorage[socket.id].rooms) {
+        for (const room of socketStorage[socket.id].rooms) {
+          socket.leave(room);
+        }
+      }
+      socket.leave(socketStorage[socket.id].userID);
+      delete socketStorage[socket.id];
+    }
+    console.log("socketStorage after disconnect", socketStorage);
+  });
+});

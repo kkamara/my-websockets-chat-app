@@ -3,8 +3,8 @@ import React from 'react'
 import "./MessageBoxItem.scss"
 
 const MessageBoxItem = ({ item }) => {
-  const authUsersID = localStorage.getItem("user-id")
-  if (authUsersID == item.sender.id) {
+  const authUsersID = JSON.parse(localStorage.getItem("user"))
+  if (authUsersID.id == item.sender.id) {
     return <div className="my-message-box-item">
       {item.content}
     </div>

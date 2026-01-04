@@ -9,13 +9,13 @@ const MessageBoxItem = ({ item }) => {
       {item.content}
     </div>
   }
-
+  
   return <div className="other-message-box-item">
     <div className="container">
       <div className="row">
         <div className="col-md-1">
           <img
-            src={item.avatarPath}
+            src={item.sender.avatarPath}
             className="img-fluid profile-picture"
           />
         </div>

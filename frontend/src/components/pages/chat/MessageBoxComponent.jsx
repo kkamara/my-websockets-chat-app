@@ -6,8 +6,19 @@ import { setOpenChat } from '../../../redux/actions/openChatActions'
 import { getMessages } from '../../../redux/actions/messagesActions'
 import { createMessageAction } from '../../../redux/actions/createMessageActions'
 import io from "socket.io-client"
+import Lottie from 'react-lottie'
+import animationData from '../../../animations/typing.json'
 
 import "./MessageBoxComponent.scss"
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData,
+  renderSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+}
 
 let socket
 
@@ -94,6 +105,23 @@ const MessageBoxComponent = () => {
 
   function handleMessageChange (e) {
     setMessage(e.target.value)
+    
+    if (!socketConnected) {
+      return
+    }
+
+    if (!typing) {
+      setTyping(true)
+      socket.emit("typing", state.openChat.data.id)
+    }
+
+    const timerLength = 3000 // 3 seconds
+    setTimeout(() => {
+      if (typing) {
+        socket.emit("stop typing", state.openChat.data.id)
+        setTyping(false)
+      }
+    }, timerLength)
   }
 
   function handleSubmit (e) {
@@ -131,6 +159,13 @@ const MessageBoxComponent = () => {
           <MessageBoxItem key={index} item={m}/>
         ))}
       </ScrollableFeed>
+      {isTyping ? <div>
+        <Lottie
+          options={defaultOptions}
+          width={70}
+          style={{ marginBottom: 15, marginLeft: 0, }}
+        />
+      </div> : (<></>)}
     </div>
 
     <input

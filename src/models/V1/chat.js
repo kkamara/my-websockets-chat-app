@@ -405,7 +405,7 @@ module.exports = (sequelize, DataTypes) => {
             type: sequelize.QueryTypes.SELECT,
           },
         );
-console.log(authChatUsers)
+        
         for (const chat of authChatUsers) {
           const chatWithQueryUser = await sequelize.query(
             `SELECT *
@@ -422,7 +422,7 @@ console.log(authChatUsers)
               type: sequelize.QueryTypes.SELECT,
             },
           );
-          console.log(chatWithQueryUser)
+          
           if (0 < chatWithQueryUser.length) {
             res = true;
             return res;

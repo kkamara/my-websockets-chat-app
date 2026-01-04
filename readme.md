@@ -1,6 +1,4 @@
-![nodejs-reactjs-boilerplate.png](https://github.com/kkamara/useful/blob/main/nodejs-reactjs-boilerplate.png?raw=true)
-
-![nodejs-reactjs-boilerplate2.png](https://github.com/kkamara/useful/blob/main/nodejs-reactjs-boilerplate2.png?raw=true)
+<img src="https://github.com/kkamara/useful/raw/refs/heads/main/my-websockets-chat-app.gif" alt="my-websockets-chat-app.gif" width="1000px"/>
 
 # my-websockets-chat-app
 

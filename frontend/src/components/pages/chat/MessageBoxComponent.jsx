@@ -17,6 +17,7 @@ const MessageBoxComponent = () => {
   const [open, setOpen] = useState(false)
 
   const [message, setMessage] = useState("")
+  const [messages, setMessages] = useState([])
 
   useEffect(() => {
     if (false === state.openChat.loading && state.openChat.data) {
@@ -24,6 +25,12 @@ const MessageBoxComponent = () => {
       dispatch(getMessages(state.openChat.data.id))
     }
   }, [state.openChat])
+
+  useEffect(() => {
+    if (false === state.messages.loading && state.messages.data) {
+      setMessages(state.messages.data.messages)
+    }
+  }, [state.messages])
 
   const handleCloseMessageBox = () => {
     dispatch(setOpenChat(null))
@@ -65,7 +72,7 @@ const MessageBoxComponent = () => {
 
     <div className="messages">
       <ScrollableFeed>
-        {state.messages.data.messages.map((m, index) => (
+        {messages.map((m, index) => (
           <MessageBoxItem key={index} item={m}/>
         ))}
       </ScrollableFeed>

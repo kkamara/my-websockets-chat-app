@@ -10,6 +10,7 @@ import createChatReducer from "./createChatReducer"
 import createGroupChatReducer from "./createGroupChatReducer"
 import openChatReducer from "./openChatReducer"
 import messagesReducer from "./messagesReducer"
+import createMessageReducer from "./createMessageReducer"
 
 export default combineReducers({
   auth: authReducer,
@@ -23,4 +24,5 @@ export default combineReducers({
   createGroupChat: createGroupChatReducer,
   openChat: openChatReducer,
   messages: messagesReducer,
+  createMessage: createMessageReducer,
 })

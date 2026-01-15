@@ -39,11 +39,17 @@ const MessageBoxComponent = () => {
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
 
+  const searchParams = new URLSearchParams(window.location.search)
+
   useEffect(() => {
     if (false === state.openChat.loading && state.openChat.data) {
       setOpen(true)
-      dispatch(getMessages(state.openChat.data.id))
-      
+      if (
+        state.openChat.data?.id !== state.messages.data?.id
+      ) {
+        dispatch(getMessages(state.openChat.data.id))
+      }
+
       socket.emit("join chat", {
         userID: JSON.parse(localStorage.getItem("user")).id,
         chatID: state.openChat.data.id,
@@ -54,6 +60,9 @@ const MessageBoxComponent = () => {
   useEffect(() => {
     if (false === state.messages.loading && state.messages.data) {
       setMessages(state.messages.data.messages)
+      if (null === state.openChat.data) {
+        dispatch(setOpenChat(state.messages.data))
+      }
     }
   }, [state.messages])
 
@@ -68,6 +77,10 @@ const MessageBoxComponent = () => {
   }, [state.createMessage])
 
   useEffect(() => {
+    if (searchParams.get("chatID")) {
+      handleChatIdInURL(searchParams.get("chatID"))
+    }
+
     socket = io("http://localhost:8000")
     socket.emit("setup", JSON.parse(localStorage.getItem("user")))
     socket.on("connected", () => setSocketConnected(true))
@@ -102,14 +115,19 @@ const MessageBoxComponent = () => {
     }
   })
 
+  async function handleChatIdInURL(chatIdFromSearch) {
+    dispatch(getMessages(chatIdFromSearch))
+  }
+
   const handleCloseMessageBox = () => {
     dispatch(setOpenChat(null))
     setOpen(false)
+    window.location = "http://" + window.location.host + "/chat"
   }
 
   function handleMessageChange (e) {
     setMessage(e.target.value)
-    
+
     if (!socketConnected) {
       return
     }

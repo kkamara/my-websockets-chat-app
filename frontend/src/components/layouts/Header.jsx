@@ -17,12 +17,6 @@ export default function Header() {
     dispatch(getNotifications())
   }, [])
 
-  useEffect(() => {
-    if (false === state.notifications.loading) {
-      console.log("Notifications updated: ", state.notifications.data)
-    }
-  }, [state.notifications.data])
-
   const renderNotifications = () => {
     return <li className="nav-item dropdown">
       <a className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,13 +25,15 @@ export default function Header() {
       </a>
       <ul className="dropdown-menu">
         {state.notifications.data.map((notification, index) => (
-          <li key={index}>
-            <Link
-              className="dropdown-item" 
-              to={`/chat?chatID=${notification.chatID}`}
-            >
-              {notification.content.slice(0, 10)}...
-            </Link>
+          <li
+            key={index}
+            className="dropdown-item"
+            onClick={() => {
+              window.location = window.location.origin +
+                `/chat/?chatID=${notification.chatID}`
+            }}
+          >
+            {notification.content.slice(0, 10)}...
           </li>
         ))}
       </ul>
@@ -53,13 +49,14 @@ export default function Header() {
             <img
               className="header-user-avatar"
               src={state.auth.data.user.avatarPath}
+              alt="User Avatar"
             />
             User
           </a>
           <ul className="dropdown-menu">
             <li>
               <Link
-                className="dropdown-item" 
+                className="dropdown-item"
                 to="/user/settings"
               >
                 Settings
@@ -67,7 +64,7 @@ export default function Header() {
             </li>
             <li>
               <Link
-                className="dropdown-item" 
+                className="dropdown-item"
                 to="/user/logout"
               >
                 Sign Out
@@ -80,8 +77,8 @@ export default function Header() {
       return <>
         <li className="nav-item">
           <Link
-            className="nav-link active" 
-            aria-current="page" 
+            className="nav-link active"
+            aria-current="page"
             to="/user/login"
           >
             Sign In
@@ -89,8 +86,8 @@ export default function Header() {
         </li>
         <li className="nav-item">
           <Link
-            className="nav-link active" 
-            aria-current="page" 
+            className="nav-link active"
+            aria-current="page"
             to="/user/register"
           >
             Register

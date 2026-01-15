@@ -104,17 +104,24 @@ io.on("connection", socket => {
 
   socket.on("new message", newMessageReceived => {
     var chat = newMessageReceived;
-
+  console.log(chat)
     if (!chat.to) {
       return console.log("chat.to not defined");
     }
 
-    chat.to.forEach(to => {
-      socket.in(to.userID).emit(
-        "message received",
-        newMessageReceived,
+    if (Array.isArray(chat.to)) {
+      chat.to.forEach(to => {
+        socket.in(to.userID).emit(
+            "message received",
+            newMessageReceived,
+        );
+      });
+    } else {
+      socket.in(chat.to.userID).emit(
+          "message received",
+          newMessageReceived,
       );
-    });
+    }
   });
 
   socket.on("typing", room => socket.in(room).emit("typing"));
